@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.liangyaofeng.dao.ProductDao">
+    <!--id应该是接口中的方法，结果类型如没有配置别名则应该使用全名称 -->
+    <select id="getAll" resultMap="product_all" parameterType="map">
+        select id,name,p.pid,tname,price,picture
+        from product p,protype t
+        where p.pid=t.pid
+            <if test="name!=null and name!=''">
+                and NAME like concat(concat('%',#{name}),'%')
+            </if>
+    </select>
+    <!--关联查询结果映射-->
+    <resultMap id="product_all" type="product">
+        <id property="id" column="id"></id>
+        <result property="name" column="name"></result>
+        <result property="pid" column="pid"></result>
+        <result property="price" column="price"></result>
+        <result property="picture" column="picture"></result>
+        <!--映射关系，指定属性与属性的类型-->
+        <association property="protype" javaType="Protype">
+            <id property="pid" column="pid"></id>
+            <result property="tname" column="tname"></result>
+        </association>
+    </resultMap>
+
+
+    <!--添加-->
+    <insert id="addProduct" parameterType="Product">
+        insert into Product values (#{id},#{name},#{pid},#{price},#{picture})
+    </insert>
+
+    <!--修改-->
+    <update id="updateProduct">
+        update product
+        <set>
+            <if test="name!=null and name!=''">
+                NAME =#{name},
+            </if>
+            <if test="pid!=null and pid!=''">
+                pid =#{pid},
+            </if>
+            <if test="price!=null and price!=''">
+                price=#{price},
+            </if>
+            <if test="picture!=null and picture!=''">
+                picture = #{picture}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!--多删除-->
+    <delete id="deleteProductids">
+        delete from product where id in
+        <foreach collection="list" open="(" item="id" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--删除-->
+    <delete id="deleteByid">
+        delete from product where id=#{id}
+    </delete>
+
+
+    <!--根据id查询-->
+    <select id="findProductById" resultType="Product">
+        select id,name,p.pid,tname,price,picture
+        from product p,protype t
+        where p.pid=t.pid and id=#{id}
+    </select>
+
+
+
+
+    <!--获得商品信息并分页 -->
+    <select id="getProductPager" resultType="Product">
+            select id,name,p.pid,tname,price,picture
+        from product p,protype t limit #{skip},#{size}
+    </select>
+    <!--关联查询结果映射-->
+    <!--<resultMap id="product_getpager" type="product">-->
+        <!--<id property="id" column="id"></id>-->
+        <!--<result property="name" column="name"></result>-->
+        <!--<result property="pid" column="pid"></result>-->
+        <!--<result property="price" column="price"></result>-->
+        <!--<result property="picture" column="picture"></result>-->
+        <!--&lt;!&ndash;映射关系，指定属性与属性的类型&ndash;&gt;-->
+        <!--<association property="protype" javaType="Protype">-->
+            <!--<id property="pid" column="pid"></id>-->
+            <!--<result property="tname" column="tname"></result>-->
+        <!--</association>-->
+    <!--</resultMap>-->
+
+
+
+
+
+
+    <!--获得商品总数 -->
+    <select id="getProductCount" resultType="int">
+        select count(*) from product
+    </select>
+
+
+
+
+</mapper>
