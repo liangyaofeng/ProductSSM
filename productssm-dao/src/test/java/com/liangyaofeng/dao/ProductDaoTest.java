@@ -24,7 +24,7 @@ public class ProductDaoTest {
 
     @Test
     public void testGetAll(){
-        List<Product> list=productDao.getAll("");
+        List<Product> list=productDao.getAll("百草味东北松子200gx2袋");
         System.out.println(list);
     }
 
