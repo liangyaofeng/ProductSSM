@@ -21,7 +21,7 @@
 
         <junit.version>4.12</junit.version>
         <spring-test.version>4.3.18.RELEASE</spring-test.version>
-        <spring.version>4.3.0.RELEASE</spring.version>
+        <spring.version>5.2.20.RELEASE</spring.version>
         <jstl.version>1.2</jstl.version>
         <servlet.version>3.0.1</servlet.version>
         <jsp-api.version>2.1</jsp-api.version>
